@@ -26,9 +26,6 @@ namespace Socket_Server
         // Instance to dispatcher invoke mainwindow
         private MainWindow Instance { get; set; }
 
-        // Flag to start
-        private bool flag = false;
-
         // Max customer
         private int maxCustomer;
         private int countCustomer = 0;
@@ -36,8 +33,17 @@ namespace Socket_Server
         // List name of customer
         private List<string> name_customer = null;
 
+        private class product
+        {
+            public string index { get; set; }
+            public string name { get; set; }
+            public string price { get; set; }
+            public string priceOrder { get; set; }
+            public string nameCustomerOrder { get; set; }
+        }
+
         // Product list
-        private List<string> products = null;
+        private List<product> products = null;
 
         // Create server
         private Socket server;
@@ -46,7 +52,7 @@ namespace Socket_Server
         Int32 port = 3000;
         IPAddress localAddr = IPAddress.Parse("127.0.0.1");
 
-        // Create new playing time
+        // Create countdown timer
         private DateTime time = new DateTime(1, 1, 1, 0, 1, 0);
 
         // Call func interval = 1s
@@ -64,7 +70,7 @@ namespace Socket_Server
             dispatcherTimer.Interval = new TimeSpan(0, 0, 1);
 
             name_customer = new List<string>();
-            products = new List<string>();
+            products = new List<product>();
 
             var screen = new MaxCustomerWindow();
             if (screen.ShowDialog() == false) { this.Close(); }
@@ -94,7 +100,15 @@ namespace Socket_Server
                           };
 
             // Format & add product to list
-            foreach (var el in product) { products.Add(el.index + "-" + el.name + "-" + el.price); }
+            foreach (var el in product)
+            {
+                products.Add(new product
+                {
+                    index = el.index,
+                    name = el.name,
+                    price = el.price
+                });
+            }
 
             server = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
@@ -120,14 +134,8 @@ namespace Socket_Server
 
         private void Handle_Socket(Socket client)
         {
-            while (true)
+            try
             {
-                if (flag == false)
-                {
-                    flag = true;
-                    //dispatcherTimer.Start();
-                }
-
                 // Buffer for reading data
                 byte[] bytes = new Byte[1024];
                 byte[] msg;
@@ -145,6 +153,8 @@ namespace Socket_Server
                     // Handle reject client
                     msg = Encoding.ASCII.GetBytes("FULL CUSTOMER");
                     client.Send(msg);
+                    client.Disconnect(true);
+
                     return;
                 }
                 else if (name_customer.Contains(data))
@@ -166,27 +176,22 @@ namespace Socket_Server
 
                 countCustomer++;
                 name_customer.Add(data);
+
+                // Reset & Start timer
+                Instance.Dispatcher.Invoke(() => { time = new DateTime(1, 1, 1, 0, 1, 0); dispatcherTimer.Start(); });
+
+                // Append notification in at terminal
                 Instance.Dispatcher.Invoke(() => Terminal_TextBox.AppendText("\nHave a connected"));
 
                 // Send product list to client
                 Instance.Dispatcher.Invoke(() => Terminal_TextBox.AppendText("\nSending products to client"));
                 foreach (var e in products)
                 {
-                    msg = Encoding.ASCII.GetBytes(e + "*");
+                    msg = Encoding.ASCII.GetBytes(e.index + "-" + e.name + "-" + e.price + "*");
                     client.Send(msg);
                 }
                 msg = System.Text.Encoding.ASCII.GetBytes("EOF");
                 client.Send(msg);
-
-                while ((i = client.Receive(bytes)) != 0)
-                {
-                    data = Encoding.ASCII.GetString(bytes, 0, i);
-                    break;
-                };
-
-                // Send timer to client
-                //msg = System.Text.Encoding.ASCII.GetBytes();
-                //client.Send(msg);
 
                 // Listen order from client
                 while ((i = client.Receive(bytes)) != 0)
@@ -195,18 +200,33 @@ namespace Socket_Server
                     break;
                 };
 
-                // Add order to list
+                // Check & add info customer to products list
+                Instance.Dispatcher.Invoke(() => Terminal_TextBox.AppendText("\nHave a order"));
 
-                //client.Close();
+                string[] words = data.Split('-');
+
+                foreach (var el in products)
+                {
+                    if (words[0] == el.index)
+                    {
+                        if (int.Parse(el.priceOrder) < int.Parse(words[1]) || el.priceOrder == "")
+                        {
+                            el.priceOrder = words[1];
+                            el.nameCustomerOrder = words[2];
+                            MessageBox.Show(el.priceOrder + "\n" + el.nameCustomerOrder);
+                            break;
+                        }
+                    }
+                }
+
             }
+            catch { Instance.Dispatcher.Invoke(() => Terminal_TextBox.AppendText("\nDisconnected")); }
         }
-
-
 
         private void Closing_Window(object sender, System.ComponentModel.CancelEventArgs e)
         {
             MessageBoxResult result = MessageBox.Show("Are you sure?", "Exit notification", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-            if (result == MessageBoxResult.Yes) { e.Cancel = false; }
+            if (result == MessageBoxResult.Yes) { server.Disconnect(true); e.Cancel = false; }
             else { e.Cancel = true; }
         }
     }

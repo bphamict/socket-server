@@ -42,8 +42,9 @@ namespace Socket_Server
             else
             {
                 maxCustomer = int.Parse(s);
-                this.DialogResult = true;
-                this.Close();
+
+                if (maxCustomer < 2) { MessageBox.Show("Min number is 2"); }
+                else { this.DialogResult = true; this.Close(); }
             }
         }
     }
