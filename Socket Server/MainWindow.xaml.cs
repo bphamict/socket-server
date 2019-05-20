@@ -151,7 +151,7 @@ namespace Socket_Server
                 {
                     msg = Encoding.ASCII.GetBytes("NAME EXIST");
                     client.Send(msg);
-                    do { if ((i = client.Receive(bytes)) != 0) { data = Encoding.ASCII.GetString(bytes, 0, i); } } while (name_customer.Contains(data));
+                    do { data = Encoding.ASCII.GetString(bytes, 0, i); } while (name_customer.Contains(data) && (i = client.Receive(bytes)) != 0);
                 }
 
                 countCustomer++;
