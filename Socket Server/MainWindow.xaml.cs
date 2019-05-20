@@ -149,9 +149,19 @@ namespace Socket_Server
                 }
                 else if (name_customer.Contains(data))
                 {
-                    msg = Encoding.ASCII.GetBytes("NAME EXIST");
-                    client.Send(msg);
-                    do { data = Encoding.ASCII.GetString(bytes, 0, i); } while (name_customer.Contains(data) && (i = client.Receive(bytes)) != 0);
+                    do
+                    {
+                        msg = Encoding.ASCII.GetBytes("NAME EXIST");
+                        client.Send(msg);
+
+                        while ((i = client.Receive(bytes)) != 0)
+                        {
+                            data = "";
+                            data = Encoding.ASCII.GetString(bytes, 0, i);
+                            break;
+                        };
+                    }
+                    while (name_customer.Contains(data));
                 }
 
                 countCustomer++;
