@@ -26,6 +26,9 @@ namespace Socket_Server
         // Instance to dispatcher invoke mainwindow
         private MainWindow Instance { get; set; }
 
+        // Path of product file
+        string path = AppDomain.CurrentDomain.BaseDirectory + "/product-list.xml";
+
         // Max customer
         private int maxCustomer;
         private int countCustomer = 0;
@@ -81,9 +84,6 @@ namespace Socket_Server
             MaxCustomer_TextBlock.Text = maxCustomer.ToString();
             CountTime_TextBlock.Text = "";
             Terminal_TextBox.AppendText("Waiting for  connection...");
-
-            // Path of product file
-            string path = AppDomain.CurrentDomain.BaseDirectory + "/product-list.xml";
 
             // Load XML
             XDocument doc;
@@ -236,6 +236,16 @@ namespace Socket_Server
                                 msg = Encoding.ASCII.GetBytes("WIN");
                                 client.Send(msg);
 
+                                // Remove in XML
+                                XDocument doc = XDocument.Load(path);
+                                var product = from el in doc.Descendants("product")
+                                              let index = el.Attribute("index")
+                                              where index.Value == p.index
+                                              select el;
+                                product.ToList().ForEach(x => x.Remove());
+                                doc.Save("product-list.xml");
+
+                                // Receive info bank & card
                                 while ((i = client.Receive(bytes)) != 0)
                                 {
                                     data = Encoding.ASCII.GetString(bytes, 0, i);

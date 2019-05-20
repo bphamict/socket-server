@@ -1,0 +1,17 @@
+C:\Users\dell\source\repos\Socket Server\Socket Server\bin\Release\Socket Server.exe.config
+C:\Users\dell\source\repos\Socket Server\Socket Server\bin\Release\Socket Server.exe
+C:\Users\dell\source\repos\Socket Server\Socket Server\bin\Release\Socket Server.pdb
+C:\Users\dell\source\repos\Socket Server\Socket Server\obj\Release\Socket Server.csprojAssemblyReference.cache
+C:\Users\dell\source\repos\Socket Server\Socket Server\obj\Release\MainWindow.g.cs
+C:\Users\dell\source\repos\Socket Server\Socket Server\obj\Release\MaxCustomerWindow.g.cs
+C:\Users\dell\source\repos\Socket Server\Socket Server\obj\Release\App.g.cs
+C:\Users\dell\source\repos\Socket Server\Socket Server\obj\Release\Socket Server_MarkupCompile.cache
+C:\Users\dell\source\repos\Socket Server\Socket Server\obj\Release\Socket Server_MarkupCompile.lref
+C:\Users\dell\source\repos\Socket Server\Socket Server\obj\Release\MainWindow.baml
+C:\Users\dell\source\repos\Socket Server\Socket Server\obj\Release\MaxCustomerWindow.baml
+C:\Users\dell\source\repos\Socket Server\Socket Server\obj\Release\Socket Server.g.resources
+C:\Users\dell\source\repos\Socket Server\Socket Server\obj\Release\Socket_Server.Properties.Resources.resources
+C:\Users\dell\source\repos\Socket Server\Socket Server\obj\Release\Socket Server.csproj.GenerateResource.cache
+C:\Users\dell\source\repos\Socket Server\Socket Server\obj\Release\Socket Server.csproj.CoreCompileInputs.cache
+C:\Users\dell\source\repos\Socket Server\Socket Server\obj\Release\Socket Server.exe
+C:\Users\dell\source\repos\Socket Server\Socket Server\obj\Release\Socket Server.pdb
