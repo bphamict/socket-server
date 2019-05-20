@@ -19,7 +19,12 @@ namespace Socket_Server
         public MainWindow()
         {
             InitializeComponent();
+
+            Instance = this;
         }
+
+        // Instance to dispatcher invoke mainwindow
+        private MainWindow Instance { get; set; }
 
         // Flag to start
         private bool flag = false;
@@ -146,21 +151,15 @@ namespace Socket_Server
                 {
                     msg = Encoding.ASCII.GetBytes("NAME EXIST");
                     client.Send(msg);
-                    while ((i = client.Receive(bytes)) != 0)
-                    {
-                        data = Encoding.ASCII.GetString(bytes, 0, i);
-                        break;
-                    };
+                    do { if ((i = client.Receive(bytes)) != 0) { data = Encoding.ASCII.GetString(bytes, 0, i); } } while (name_customer.Contains(data));
                 }
 
                 countCustomer++;
                 name_customer.Add(data);
-                //Terminal_TextBox.AppendText("Have a connected");
-
-                // Add socket to list
+                Instance.Dispatcher.Invoke(() => Terminal_TextBox.AppendText("\nHave a connected"));
 
                 // Send product list to client
-                //Terminal_TextBox.AppendText("Sending products to client");
+                Instance.Dispatcher.Invoke(() => Terminal_TextBox.AppendText("\nSending products to client"));
                 foreach (var e in products)
                 {
                     msg = Encoding.ASCII.GetBytes(e + "*");
@@ -180,12 +179,19 @@ namespace Socket_Server
                 //client.Send(msg);
 
                 // Listen order from client
+                while ((i = client.Receive(bytes)) != 0)
+                {
+                    data = Encoding.ASCII.GetString(bytes, 0, i);
+                    break;
+                };
 
                 // Add order to list
 
                 //client.Close();
             }
         }
+
+
 
         private void Closing_Window(object sender, System.ComponentModel.CancelEventArgs e)
         {
