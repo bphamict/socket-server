@@ -53,7 +53,7 @@ namespace Socket_Server
         IPAddress localAddr = IPAddress.Parse("127.0.0.1");
 
         // Create countdown timer
-        private DateTime time = new DateTime(1, 1, 1, 0, 1, 0);
+        private DateTime time;
 
         // Call func interval = 1s
         private void DispatcherTimer_Tick(object sender, EventArgs e)
@@ -136,6 +136,9 @@ namespace Socket_Server
         {
             try
             {
+                // name of customer
+                string nameCS;
+
                 // Buffer for reading data
                 byte[] bytes = new Byte[1024];
                 byte[] msg;
@@ -175,6 +178,7 @@ namespace Socket_Server
                 }
 
                 countCustomer++;
+                nameCS = data;
                 name_customer.Add(data);
 
                 // Reset & Start timer
@@ -209,16 +213,45 @@ namespace Socket_Server
                 {
                     if (words[0] == el.index)
                     {
-                        if (int.Parse(el.priceOrder) < int.Parse(words[1]) || el.priceOrder == "")
+                        if (el.priceOrder == null || (int.Parse(el.priceOrder) < int.Parse(words[1])))
                         {
                             el.priceOrder = words[1];
                             el.nameCustomerOrder = words[2];
-                            MessageBox.Show(el.priceOrder + "\n" + el.nameCustomerOrder);
                             break;
                         }
                     }
                 }
 
+                // Wait until time was up & send result
+                while (true)
+                {
+                    if (time.Second == 0 && time.Minute != 1)
+                    {
+                        Instance.Dispatcher.Invoke(() => { Terminal_TextBox.AppendText("\nTime was up"); dispatcherTimer.Stop(); });
+
+                        foreach (product p in products)
+                        {
+                            if (p.priceOrder != "" && p.nameCustomerOrder != "" && nameCS == p.nameCustomerOrder)
+                            {
+                                msg = Encoding.ASCII.GetBytes("WIN");
+                                client.Send(msg);
+
+                                while ((i = client.Receive(bytes)) != 0)
+                                {
+                                    data = Encoding.ASCII.GetString(bytes, 0, i);
+                                    break;
+                                };
+
+                                break;
+                            }
+                        }
+
+                        msg = Encoding.ASCII.GetBytes("LOSE");
+                        client.Send(msg);
+
+                        break;
+                    }
+                }
             }
             catch { Instance.Dispatcher.Invoke(() => Terminal_TextBox.AppendText("\nDisconnected")); }
         }

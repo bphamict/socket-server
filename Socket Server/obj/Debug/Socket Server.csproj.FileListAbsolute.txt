@@ -3,15 +3,15 @@ C:\Users\dell\source\repos\Socket Server\Socket Server\bin\Debug\Socket Server.e
 C:\Users\dell\source\repos\Socket Server\Socket Server\bin\Debug\Socket Server.pdb
 C:\Users\dell\source\repos\Socket Server\Socket Server\obj\Debug\Socket Server.csprojAssemblyReference.cache
 C:\Users\dell\source\repos\Socket Server\Socket Server\obj\Debug\MainWindow.g.cs
+C:\Users\dell\source\repos\Socket Server\Socket Server\obj\Debug\MaxCustomerWindow.g.cs
 C:\Users\dell\source\repos\Socket Server\Socket Server\obj\Debug\App.g.cs
 C:\Users\dell\source\repos\Socket Server\Socket Server\obj\Debug\Socket Server_MarkupCompile.cache
 C:\Users\dell\source\repos\Socket Server\Socket Server\obj\Debug\Socket Server_MarkupCompile.lref
 C:\Users\dell\source\repos\Socket Server\Socket Server\obj\Debug\MainWindow.baml
+C:\Users\dell\source\repos\Socket Server\Socket Server\obj\Debug\MaxCustomerWindow.baml
 C:\Users\dell\source\repos\Socket Server\Socket Server\obj\Debug\Socket Server.g.resources
 C:\Users\dell\source\repos\Socket Server\Socket Server\obj\Debug\Socket_Server.Properties.Resources.resources
 C:\Users\dell\source\repos\Socket Server\Socket Server\obj\Debug\Socket Server.csproj.GenerateResource.cache
 C:\Users\dell\source\repos\Socket Server\Socket Server\obj\Debug\Socket Server.csproj.CoreCompileInputs.cache
 C:\Users\dell\source\repos\Socket Server\Socket Server\obj\Debug\Socket Server.exe
 C:\Users\dell\source\repos\Socket Server\Socket Server\obj\Debug\Socket Server.pdb
-C:\Users\dell\source\repos\Socket Server\Socket Server\obj\Debug\MaxCustomerWindow.g.cs
-C:\Users\dell\source\repos\Socket Server\Socket Server\obj\Debug\MaxCustomerWindow.baml
